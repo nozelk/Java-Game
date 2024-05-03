@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JPanel;
 
 import entity.Player;
@@ -26,8 +25,9 @@ public class GamePanel extends JPanel implements Runnable{
 
 
     KeyHandler keyH = new KeyHandler();
+    MouseLisener mouseL = new MouseLisener();
     Thread gameThread;
-    Player player = new Player(this,keyH);
+    Player player = new Player(this,keyH,mouseL);
 
     // Set player's default positions
     /*int playerX = player.x;
@@ -41,6 +41,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        this.addMouseListener(mouseL);
+        this.addMouseMotionListener(mouseL);
     }
 
     public void startGameThread(){

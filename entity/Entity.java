@@ -6,7 +6,12 @@ public class Entity {
 
     public int x, y;
     public int speed;
-    
+
+    public boolean attacking;
+    public int attackDuration;
+    public int attackCounter;
+
+    public BufferedImage attack1up, attack2up, attack1right, attack2right;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public String directions;
 
