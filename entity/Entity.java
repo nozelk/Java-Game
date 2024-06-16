@@ -51,6 +51,11 @@ public class Entity {
     public int defThorns;
     public int defMaxLife;
     
+    public int speedLvl;
+    public int attackLvl;
+    public int healthLvl;
+    public int projectileLvl;
+
     public int health;
     public int type;
     public int speed;
@@ -68,6 +73,7 @@ public class Entity {
     public int speedValue;
     public int maxLifeValue;
     
+    public boolean onPath = false;
 
     public Entity(GamePanel gp){
         this.gp = gp;

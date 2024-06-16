@@ -44,6 +44,10 @@ public class Player extends Entity{
         solidArea.width = 32;
         solidArea.height = 32;
 
+        speedLvl = 1;
+        attackLvl = 1;
+        healthLvl = 1;
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -55,19 +59,19 @@ public class Player extends Entity{
 
     }
     public int getAttack(){
-        return defAttack + currentWeapon.attackValue + currentArmor.attackValue;
+        return defAttack + currentWeapon.attackValue + currentArmor.attackValue + attackLvl - 1;
     }
     public int getDefense(){
         return defDefense + currentWeapon.defenseValue + currentArmor.defenseValue;
     }
     public int getSpeed(){
-        return defSpeed + currentWeapon.speedValue + currentArmor.speedValue;
+        return defSpeed + currentWeapon.speedValue + currentArmor.speedValue + speedLvl - 1;
     }
     public int getThorns(){
         return defThorns + currentWeapon.thornsValue + currentArmor.thornsValue;
     }
     public int getMaxLife(){
-        return defMaxLife + currentWeapon.maxLifeValue + currentArmor.maxLifeValue;
+        return defMaxLife + currentWeapon.maxLifeValue + currentArmor.maxLifeValue + healthLvl - 1;
     }
     public void getPlayerImage(){
         
@@ -197,9 +201,9 @@ public class Player extends Entity{
                 if(damage < 0){
                     damage = 0;
                 } 
-                System.out.println(gp.monster[i].life);
+                //System.out.println(gp.monster[i].life);
                 gp.monster[i].life -= damage;
-                System.out.println(gp.monster[i].life);
+                //System.out.println(gp.monster[i].life);
                 gp.monster[i].invincible = true;
 
                 if(gp.monster[i].life <= 0){

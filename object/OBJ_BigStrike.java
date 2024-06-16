@@ -10,11 +10,14 @@ public class OBJ_BigStrike extends Projectile{
         super(gp);
         name = "BigStrike";
         
-        speed = 6;
+        projectileLvl = 1;
+        speed = 5;
+        System.out.println("BigStrike speed: " + speed);
         maxLife = 80;
         life = maxLife;
         attack = 5;
         alive = false;
+        
         getImage();
     }
     public void getImage(){
@@ -28,4 +31,6 @@ public class OBJ_BigStrike extends Projectile{
         left2 = setup("/res/neil/StrikeNeilLeft");
         down_right1 = setup("/res/neil/StrikeNeilDownRight");
     }
+
+
 }

@@ -28,10 +28,10 @@ public class Neil extends Player {
 
         health = 20;
         type = 1;
-        defAttack = 2;
+        defAttack = 1;
         defDefense = 0;
-        defMaxLife = 6;
-        defSpeed = 4;
+        defMaxLife = 2;
+        defSpeed = 5;
         defThorns = 0;
 
         currentWeapon = new OBJ_Weapon_Normal(gp);

@@ -184,13 +184,13 @@ public class UI {
         int boxY = y + gp.tileSize * 2;
         
         // Speed Upgrade Box
-        drawUpgradeBox("Speed", gp.player.speed, gp.player.speed, startX, boxY, boxWidth, boxHeight, boots);
+        drawUpgradeBox("Speed", gp.player.speed, gp.player.speedLvl, startX, boxY, boxWidth, boxHeight, boots);
         
         // Health Upgrade Box
-        drawUpgradeBox("Health", gp.player.maxLife, gp.player.health, startX + boxWidth + gp.tileSize, boxY, boxWidth, boxHeight, heart_full);
+        drawUpgradeBox("Health", gp.player.maxLife, gp.player.healthLvl, startX + boxWidth + gp.tileSize, boxY, boxWidth, boxHeight, heart_full);
         
         // Attack Upgrade Box
-        drawUpgradeBox("Attack", gp.player.attack, gp.player.attack, startX + (boxWidth + gp.tileSize) * 2, boxY, boxWidth, boxHeight, sword);
+        drawUpgradeBox("Attack", gp.player.attack, gp.player.attackLvl, startX + (boxWidth + gp.tileSize) * 2, boxY, boxWidth, boxHeight, sword);
     }
     
     public void drawUpgradeBox(String attribute, int currentValue, int currentLevel, int x, int y, int width, int height, BufferedImage image) {
