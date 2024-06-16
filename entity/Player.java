@@ -1,33 +1,37 @@
 package entity;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.MouseLisener;
+
 
 
 public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
-    MouseLisener mouseL;
+
 
     public final int screenX;
     public final int screenY;
 
-    public Player(GamePanel gp, KeyHandler keyH, MouseLisener mouseL){
+    public Player(GamePanel gp, KeyHandler keyH){
 
+        super(gp);
         this.gp = gp;
         this.keyH = keyH;
-        this.mouseL = mouseL;
+
 
         screenX = gp.screenWidth / 2 - (gp.tileSize/2);
         screenY = gp.screenHeight / 2 - (gp.tileSize/2);
@@ -35,6 +39,8 @@ public class Player extends Entity{
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
         solidArea.height = 32;
 
@@ -45,49 +51,34 @@ public class Player extends Entity{
 
         worldX = gp.tileSize * 12;
         worldY = gp.tileSize * 11;
-        speed = 4;
         directions = "down";
 
-        attacking = false;
-        attackDuration = 15;
-        attackCounter = 0;
-
-
     }
-
+    public int getAttack(){
+        return defAttack + currentWeapon.attackValue + currentArmor.attackValue;
+    }
+    public int getDefense(){
+        return defDefense + currentWeapon.defenseValue + currentArmor.defenseValue;
+    }
+    public int getSpeed(){
+        return defSpeed + currentWeapon.speedValue + currentArmor.speedValue;
+    }
+    public int getThorns(){
+        return defThorns + currentWeapon.thornsValue + currentArmor.thornsValue;
+    }
+    public int getMaxLife(){
+        return defMaxLife + currentWeapon.maxLifeValue + currentArmor.maxLifeValue;
+    }
     public void getPlayerImage(){
-        try {
-            attack1up = ImageIO.read(getClass().getResourceAsStream("/res/player/Down1Strike.PNG"));
-            attack2up = ImageIO.read(getClass().getResourceAsStream("/res/player/Down2Strike.PNG"));
-            attack1right = ImageIO.read(getClass().getResourceAsStream("/res/player/Right1Strike.PNG"));
-            attack2right = ImageIO.read(getClass().getResourceAsStream("/res/player/Right2Strike.PNG"));
-            
-            up1 = ImageIO.read(getClass().getResourceAsStream("/res/player/Down1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/res/player/Down2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/res/player/Down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/res/player/Down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/res/player/Down1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/res/player/Down2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/res/player/Right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/res/player/Right2.png"));
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        
     }
-
+    @Override
     public void update(){
 
-        if (mouseL.leftButtonPressed){
+        if (keyH.keySpacePressed == true){
             attack();
         }
-        if (attacking){
-            attackCounter++;
-            if (attackCounter >= attackDuration){
-                attacking = false;
-                attackCounter = 0;
-            }
-        }
+
 
         if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true){
 
@@ -118,6 +109,14 @@ public class Player extends Entity{
 
             collisionOn = false;
             gp.cChecker.checkTile(this);
+
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+            contactMonster(monsterIndex);
+
+            gp.eHandler.checkEvent();
+
+            //int objIndex = gp.cChecker.checkObject(this, true);
+
             if (!collisionOn){
                 switch (directions) {
                     case "up": worldY -= speed; break;
@@ -154,9 +153,62 @@ public class Player extends Entity{
             }
         }
         
+        if(keyH.shotKeyPressed == true && projectile.alive == false && shotAvalivleCounter == 60){
+
+            projectile.set(worldX, worldY, directions, true);
+
+            shotAvalivleCounter = 0;
+            gp.projectileList.add(projectile);
+            
+
+        }
+        
+
+        if(invincible){
+            invincibleCounter++;
+            if(invincibleCounter > 60){
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
+        
+        if(shotAvalivleCounter < 60){
+            shotAvalivleCounter++;
+        }
 
     }
 
+
+    public void contactMonster(int i){
+        if(i != 999){
+
+            if(invincible == false){
+                life -= gp.monster[i].attack;
+                invincible = true;
+            }
+            
+        }
+    }
+
+    public void damageMonster(int i){
+        if(i != 999){
+            if(gp.monster[i].invincible == false){
+                int damage = attack - gp.monster[i].defense;
+                if(damage < 0){
+                    damage = 0;
+                } 
+                System.out.println(gp.monster[i].life);
+                gp.monster[i].life -= damage;
+                System.out.println(gp.monster[i].life);
+                gp.monster[i].invincible = true;
+
+                if(gp.monster[i].life <= 0){
+                    gp.monster[i] = null;
+                }
+            }
+        }
+        //System.out.println(gp.monster[i].life);
+    }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
     
@@ -165,27 +217,35 @@ public class Player extends Entity{
             switch (directions) {
                 case "up":
                     image = (spriteNum == 1) ? attack1up : attack2up;
+                    attacking = false;
                     break;
                 case "down":
                     image = (spriteNum == 1) ? attack1up : attack2up;
+                    attacking = false;
                     break;
                 case "left":
                     image = (spriteNum == 1) ? attack1up : attack2up;
+                    attacking = false;
                     break;
                 case "right":
                     image = (spriteNum == 1) ? attack1right : attack2right;
+                    attacking = false;
                     break;
                 case "up-right":
                     image = (spriteNum == 1) ? attack1right : attack2right;
+                    attacking = false;
                     break;
                 case "up-left":
                     image = (spriteNum == 1) ? attack1up : attack2up;
+                    attacking = false;
                     break;
                 case "down-right":
                     image = (spriteNum == 1) ? attack1right : attack2right;
+                    attacking = false;
                     break;
                 case "down-left":
                     image = (spriteNum == 1) ? attack1up : attack2up;
+                    attacking = false;
                     break;
             }
         } else {
@@ -216,13 +276,22 @@ public class Player extends Entity{
                     break;
             }
         }
-    
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
     
     public void attack(){
         attacking = true;
+        while(attackCounter < 60){
+            attackCounter++;
+        }
         attackCounter = 0;
+        
+    }
+
+   
+    
+    public Point getPlayerPosition() {
+        return new Point(worldX, worldY);
     }
     
 }

@@ -1,10 +1,12 @@
 package tile;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +16,8 @@ public class TileManager {
 
     GamePanel gp;
     public Tile[] tile;
+    public ArrayList<int[]> spawnTile = new ArrayList<int[]>();
+    public ArrayList<int[]> forbidden = new ArrayList<int[]>();
     public int mapTileNum[][];
     
     public TileManager(GamePanel gp){
@@ -57,6 +61,7 @@ public class TileManager {
             tile[7] = new Tile();
             tile[7].image = ImageIO.read(getClass().getResourceAsStream("/res/map/rock.png"));
             tile[7].collision = true;
+            //tile[7].collisionBox = new Rectangle(18,0,45,46);
 
             tile[8] = new Tile();
             tile[8].image = ImageIO.read(getClass().getResourceAsStream("/res/map/tree.png"));
@@ -88,7 +93,15 @@ public class TileManager {
                     int num = Integer.parseInt(numbers[col]);
 
                     mapTileNum[col][row] = num;
+                    
+                    if (num ==  0 || num == 2 || num == 5 || num == 7 || num == 8){
+                        forbidden.add(new int[]{col, row});
+                    }
+                    
                     col++;
+
+
+                    
                 }
                 if (col == gp.maxWorldCol){
                     col = 0;
@@ -106,7 +119,7 @@ public class TileManager {
 
         int worldCol = 0;
         int worldRow = 0;
-
+        spawnTile = new ArrayList<int[]>();
         while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow){
 
             int tileNum = mapTileNum[worldCol][worldRow];
@@ -125,8 +138,12 @@ public class TileManager {
                     
                     g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
                 }
-
-
+                else{
+                    if(tileNum == 6 || tileNum == 1 || tileNum == 4){
+                        spawnTile.add(new int[]{worldCol, worldRow});
+                    }
+                    
+                }
             
             worldCol++;
 
