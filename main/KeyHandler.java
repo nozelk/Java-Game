@@ -83,9 +83,7 @@ public class KeyHandler implements KeyListener {
             keySpacePressed = true;
             shotKeyPressed = true;
         }
-        if (code == KeyEvent.VK_P) {
-            gp.gameState = gp.waveOver;
-        }
+
     }
 
     public void pauseState(int code) {
