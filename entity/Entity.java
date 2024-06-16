@@ -55,7 +55,8 @@ public class Entity {
     public int attackLvl;
     public int healthLvl;
     public int projectileLvl;
-
+    public int points;
+    
     public int health;
     public int type;
     public int speed;
@@ -147,21 +148,10 @@ public class Entity {
     }
     public void update() {
         setAction();
+        checkCollision();
+        
 
-        collisionOn = false;
-        gp.cChecker.checkTile(this);
-        gp.cChecker.checkObject(this,false);
-        gp.cChecker.checkEntity(this, gp.monster);
-        boolean contactPlayer = gp.cChecker.checkPlayer(this);
-
-        if(this.type == 2 && contactPlayer == true)
-        {
-            if(gp.player.invincible == false){
-                gp.player.life -= 1;
-                gp.player.invincible = true;
-            }
-
-        }
+        
 
         if (!collisionOn){
             switch (directions) {
@@ -223,17 +213,25 @@ public class Entity {
         return image;
     }
 
-    /*public void checkCollision()
+    public void checkCollision()
     {
         collisionOn = false;
         gp.cChecker.checkTile(this);
-        //gp.cChecker.checkObject(this,false);
-        //gp.cChecker.checkEntity(this, gp.monster);
-        //boolean contactPlayer = gp.cChecker.checkPlayer(this);
-        //if(this.type == type_monster && contactPlayer == true)
-        //{
-        //    damagePlayer(attack);
-        //}
+        gp.cChecker.checkObject(this,false);
+        gp.cChecker.checkEntity(this, gp.monster);
+        boolean contactPlayer = gp.cChecker.checkPlayer(this);
+        if(this.type == 2 && contactPlayer == true)
+        {
+            if(gp.player.invincible == false){
+                gp.player.life -= 1;
+                if(gp.player.life <= 0){
+                    gp.gameState = gp.gameOver;
+                }
+                gp.player.invincible = true;
+                System.out.println("Player Life: " + gp.player.life);
+            }
+
+        }
     }
     public void searchPath(int goalCol, int goalRow)
     {
@@ -318,13 +316,6 @@ public class Entity {
                     directions = "right";
                 }
             }
-            // for following player, disable this. It should be enabled when npc walking to specified location
-//            int nextCol = gp.pFinder.pathList.get(0).col;
-//            int nextRow = gp.pFinder.pathList.get(0).row;
-//            if(nextCol == goalCol && nextRow == goalRow)
-//            {
-//                onPath = false;
-//            }
         }
-    }*/
+    }
 }

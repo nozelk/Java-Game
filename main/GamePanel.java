@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.JPanel;
 
+import ai.PathFinder;
 import entity.Entity;
 import entity.Monster;
 import entity.Neil;
@@ -60,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
     int prevPosX = player.worldX / tileSize;
     int prevPosY = player.worldY / tileSize;
 
+    
     // Game State
     public int gameState;
     public final int titleState = 0;
@@ -67,9 +69,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int pauseState = 2;
     public final int waveOver = 3;
     public final int characterState = 4;
+    public final int gameOver = 5;
 
     public int currentWave = 1;
     public boolean waveInProgress = false;
+
+    public int score = 0;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -145,6 +150,11 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if (gameState == pauseState) {
             // pause menu
+        }
+        if(gameState == gameOver){
+            //System.exit(0);
+
+            // game over menu
         }
     }
 

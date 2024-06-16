@@ -59,6 +59,7 @@ public class UI {
 
         if(gp.gameState == gp.playState){
             drawplayerLife();
+            drawplayerScore();
         }
         if(gp.gameState == gp.pauseState){
             drawplayerLife();
@@ -70,9 +71,18 @@ public class UI {
         if(gp.gameState == gp.characterState){
             drawCharacterScreen();
         }
+        if(gp.gameState == gp.gameOver){
+            drawGameOverScreen();
+        }
         
     }
-
+    public void drawplayerScore(){
+        String text = "Score: " + gp.score;
+        int x = gp.screenWidth - (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth() - gp.tileSize;
+        int y = gp.tileSize/2;
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x, y);
+    }
     public void drawplayerLife(){
         int x = gp.tileSize/2;
         int y = gp.tileSize/2;
@@ -219,8 +229,39 @@ public class UI {
         }
     }
     
+    public void drawGameOverScreen(){
+        g2.setColor(new Color(0,0,0));
+        g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
     
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 50F));
+        String text = "Game Over!";
+        int x = getXforCenteredText(text);
+        int y = gp.tileSize * 3;
+    
+        g2.setColor(Color.GRAY);
+        g2.drawString(text,x+5,y+5);
+    
+        g2.setColor(Color.WHITE);
+        g2.drawString(text,x,y);
+    
+        x = gp.screenWidth / 2 - (gp.tileSize * 2)/2;
+        y += gp.tileSize;
+        g2.drawImage(gp.player.down1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+    
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
+        
+        text = "Score: " + gp.score;
+        x = getXforCenteredText(text);
+        y += gp.tileSize * 3;
+        g2.setColor(Color.WHITE);
+        g2.drawString(text,x,y);
 
+        text = "Press Enter to quit";
+        x = getXforCenteredText(text);
+        y += gp.tileSize * 3;
+        g2.setColor(Color.WHITE);
+        g2.drawString(text,x,y);
+    }
 
 
     public void drawPauseScreen(){

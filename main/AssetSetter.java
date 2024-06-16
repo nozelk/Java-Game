@@ -24,7 +24,7 @@ public class AssetSetter {
         int randomNumberx, randomNumbery;
         int spawnX, spawnY;
         int max = gp.maxWorldCol - 2;
-        int numMonsters = /*wave **/ 1;
+        int numMonsters = wave * 10;
         //int healthBoost = wave * 2;
         for (int i = 0; i < numMonsters; i++) {
             if (i < gp.monster.length) {

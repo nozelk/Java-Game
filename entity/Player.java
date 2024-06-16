@@ -207,6 +207,8 @@ public class Player extends Entity{
                 gp.monster[i].invincible = true;
 
                 if(gp.monster[i].life <= 0){
+                    gp.score += gp.monster[i].points;
+                    System.out.println(gp.score);
                     gp.monster[i] = null;
                 }
             }

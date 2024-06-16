@@ -34,14 +34,15 @@ public class Monster extends Entity {
         screenY = gp.screenHeight / 2 - (gp.tileSize/2);
 
         directions = "down";
-        solidArea = new Rectangle();
-        solidArea.x = 0;
-        solidArea.y = 0;
-        solidArea.width = 48;
-        solidArea.height = 48;
 
-        solidAreaDefaultX = 8;
-        solidAreaDefaultY = 16;
+        solidArea.x = 4;
+        solidArea.y = 4;
+        solidArea.width = 44;
+        solidArea.height = 44;
+
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        
         type = 2;
 
 
@@ -63,22 +64,14 @@ public class Monster extends Entity {
 
     }
     public void setAction(){
-        actionLockerCounter ++;
-        if(actionLockerCounter == 120){
-            Random rand = new Random();
-            int i = rand.nextInt(100)+1;
 
-            if(i <= 25){
-                directions = "up";
-            }else if(i <= 50){
-                directions = "down";
-            }else if(i <= 75){
-                directions = "left";
-            }else{
-                directions = "right";
-            }
-            actionLockerCounter = 0;
-        }
+        int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
+        int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
+
+        //System.out.println("Monster: " + worldX + " " + worldY + " Player: " + gp.player.worldX + " " + gp.player.worldY + " " + goalCol + " " + goalRow);
+
+        searchPath(goalCol, goalRow);
+        
     }
     /*@Override
     public void update(){

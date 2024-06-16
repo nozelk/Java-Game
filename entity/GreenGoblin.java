@@ -24,6 +24,7 @@ public class GreenGoblin extends Monster{
         collisionSpeed = 1;
         maxLife = 5;
         life = maxLife;
+        points = 5;
         
     }
 

@@ -186,6 +186,8 @@ public class PathFinder {
         }
         return goalReached;
     }
+
+    
     public void openNode(Node node)
     {
         if(node.open == false && node.checked == false && node.solid == false)

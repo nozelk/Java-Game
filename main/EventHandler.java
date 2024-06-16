@@ -32,9 +32,9 @@ public class EventHandler {
 
     public void checkEvent(){
 
-        if(hit(10,11,"left") == true){
+        /*if(hit(10,11,"left") == true){
             damagePit(10,11);
-        }
+        }*/
     }
 
     public boolean hit(int col, int row, String reqDirection){

@@ -29,6 +29,10 @@ public class KeyHandler implements KeyListener {
             waveState(code);
         } else if (gp.gameState == gp.characterState) {
             characterState(code);
+        } else if(gp.gameState == gp.gameOver){
+            if(code == KeyEvent.VK_ENTER){
+                System.exit(0);
+            }
         }
     }
 
